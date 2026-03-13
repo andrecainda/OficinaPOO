@@ -31,3 +31,43 @@ foreach (var func in funcionarios)
         Console.WriteLine($"Funcionário {func.Nome} não pode acessar o sistema.");
     }
 }
+
+
+Console.WriteLine("\n=== PRATICANDO LINQ ===\n");
+
+// 1. Filtrar (WHERE) - Funcionários com salário > 3000
+var salarioAlto = funcionarios.Where(f => f.CalcularSalario() > 3000);
+Console.WriteLine("Funcionários com salário > 3000:");
+foreach (var f in salarioAlto)
+{
+    Console.WriteLine($"  - {f.Nome}: {f.CalcularSalario():C}");
+}
+
+// 2. Ordenar (ORDER BY) - Por nome
+Console.WriteLine("\nFuncionários em ordem alfabética:");
+var ordenados = funcionarios.OrderBy(f => f.Nome);
+foreach (var f in ordenados)
+{
+    Console.WriteLine($"  - {f.Nome}");
+}
+
+// 3. Projetar (SELECT) - Criar objetos anônimos
+Console.WriteLine("\nApenas nomes e CPFs:");
+var dadosBasicos = funcionarios.Select(f => new { f.Nome, f.CPF });
+foreach (var item in dadosBasicos)
+{
+    Console.WriteLine($"  - {item.Nome} ({item.CPF})");
+}
+
+// 4. Agregação - Total da folha de pagamento
+var totalFolha = funcionarios.Sum(f => f.CalcularSalario());
+Console.WriteLine($"\nTotal da folha de pagamento: {totalFolha:C}");
+
+// 5. Verificar se algum atende condição (ANY)
+var alguemGanhaMuito = funcionarios.Any(f => f.CalcularSalario() > 5000);
+Console.WriteLine($"Alguém ganha mais de 5000? {(alguemGanhaMuito ? "SIM" : "NÃO")}");
+
+// 6. Primeiro que atende condição (FIRSTOrDefault)
+var primeiroHorista = funcionarios.OfType<FuncionarioHorista>().FirstOrDefault();
+if (primeiroHorista != null)
+    Console.WriteLine($"Primeiro horista: {primeiroHorista.Nome}");
